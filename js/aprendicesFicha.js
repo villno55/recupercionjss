@@ -19,20 +19,16 @@ export async function obtenerAprendices(urlFicha) {
       aprendicesMap[doc].juicios.push({
         resultado: item["Resultado de Aprendizaje"] || "N/A",
         estado: item["Juicio de Evaluación"] || "N/A",
-        fecha: item["Fecha"] || "Sin fecha",
-        instructor: item["Funcionario que registro el juicio evaluativo"] || "No registrado"
+        fecha: item["Fecha"] || item["FECHA"] || item["Fecha de Registro"] || item["Fecha Juicio"] || item["fecha"] || null,
+        instructor: item["Funcionario que registro el juicio evaluativo"] || item["Instructor"] || "No registrado"
       });
-
-    }); 
+    });
 
     const aprendices = Object.values(aprendicesMap);
-    console.log(" Aprendices procesados:", aprendices);
+    console.log("Aprendices procesados:", aprendices);
     return aprendices;
-
   } catch (error) {
-    console.error(" Error al obtener aprendices:", error);
+    console.error("Error al obtener aprendices:", error);
     return [];
   }
 }
-
-
