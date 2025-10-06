@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juicios Evaluativos - SENA</title>
+  <link rel="stylesheet" href="app.css">
+  <script type="module" src="js/app.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h2>Bienvenido, <span id="nombreUsuario"></span></h2>
+      <button id="btnSalir">Salir</button>
+    </header>
+
+    <main>
+      <section>
+        <label for="selectFicha">Selecciona una ficha:</label>
+        <select id="selectFicha"></select>
+      </section>
+
+      <section>
+        <label for="selectAprendiz">Selecciona un aprendiz:</label>
+        <select id="selectAprendiz"></select>
+      </section>
+
+      <section id="infoAprendiz">
+        <h3>Información del Aprendiz</h3>
+        <p><strong>Nombre:</strong> <span id="nombreCompleto"></span></p>
+        <p><strong>Estado general:</strong> <span id="estadoGeneral"></span></p>
+        <p><strong>Aprobados:</strong> <span id="aprobados"></span></p>
+        <p><strong>Por evaluar:</strong> <span id="porEvaluar"></span></p>
+      </section>
+
+      <section id="detalleJuicios">
+        <h3>Detalle de Juicios Evaluativos</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Resultado</th>
+              <th>Estado</th>
+              <th>Fecha</th>
+              <th>Instructor</th>
+            </tr>
+          </thead>
+          <tbody id="tablaJuicios"></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>Elaborado por Anderson Mosquera 
+        Tecnologo en Analisis y Desarrollo de Software
+        Ficha 3064975</p>
+  </footer>
+</body>
+</html>
