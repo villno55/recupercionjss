@@ -19,8 +19,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const porEvaluar = document.getElementById("porEvaluar");
   const tablaJuicios = document.getElementById("tablaJuicios");
 
+  let aprendices = []; 
+
   nombreUsuario.textContent = usuario;
 
+  
   btnSalir.addEventListener("click", () => {
     localStorage.clear();
     window.location.href = "index.html";
@@ -45,20 +48,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     const urlFicha = selectFicha.value;
     if (!urlFicha) return;
 
-    const aprendices = await obtenerAprendices(urlFicha);
+    aprendices = await obtenerAprendices(urlFicha);
+    if (!aprendices || aprendices.length === 0) {
+      const opt = document.createElement("option");
+      opt.value = "";
+      opt.textContent = "No hay aprendices";
+      selectAprendiz.appendChild(opt);
+      return;
+    }
+
     aprendices.forEach(a => {
       const opt = document.createElement("option");
-      opt.value = JSON.stringify(a);
-      opt.textContent = a.documento;
+      opt.value = a.documento;
+      opt.textContent = `${a.nombres} ${a.apellidos}`;
       selectAprendiz.appendChild(opt);
     });
   });
 
   selectAprendiz.addEventListener("change", () => {
-    const valor = selectAprendiz.value;
-    if (!valor) return;
+    const doc = selectAprendiz.value;
+    if (!doc) return;
 
-    const aprendiz = JSON.parse(valor);
+    const aprendiz = aprendices.find(a => a.documento === doc);
+    if (!aprendiz) return;
+
     nombreCompleto.textContent = `${aprendiz.nombres} ${aprendiz.apellidos}`;
 
     let aprobadosCount = 0;
@@ -67,16 +80,39 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     aprendiz.juicios.forEach(j => {
       const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${j.resultado}</td>
-        <td>${j.estado}</td>
-        <td>${j.fecha || "Sin fecha"}</td>
-        <td>${j.instructor || "Sin asignar"}</td>
-      `;
+
+      const tdResultado = document.createElement("td");
+      tdResultado.textContent = j.resultado;
+      tr.appendChild(tdResultado);
+
+      const tdEstado = document.createElement("td");
+      tdEstado.textContent = j.estado;
+      tr.appendChild(tdEstado);
+
+      const tdFecha = document.createElement("td");
+      if (j.estado && j.estado.toUpperCase() === "APROBADO" && j.fecha && j.fecha !== "Sin fecha") {
+        const fecha = new Date(j.fecha);
+        if (!isNaN(fecha)) {
+          tdFecha.textContent = fecha.toLocaleString("es-CO", {
+            dateStyle: "medium",
+            timeStyle: "short"
+          });
+        } else {
+          tdFecha.textContent = j.fecha; 
+        }
+      } else {
+        tdFecha.textContent = "—";
+      }
+      tr.appendChild(tdFecha);
+
+      const tdInstructor = document.createElement("td");
+      tdInstructor.textContent = j.instructor || "—";
+      tr.appendChild(tdInstructor);
+
       tablaJuicios.appendChild(tr);
 
-      if (j.estado === "APROBADO") aprobadosCount++;
-      if (j.estado === "POR EVALUAR") porEvaluarCount++;
+      if (j.estado && j.estado.toUpperCase() === "APROBADO") aprobadosCount++;
+      if (j.estado && j.estado.toUpperCase() === "POR EVALUAR") porEvaluarCount++;
     });
 
     estadoGeneral.textContent = aprobadosCount > 0 ? "Con avances" : "Pendiente";
@@ -84,5 +120,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     porEvaluar.textContent = porEvaluarCount;
   });
 });
-
-
