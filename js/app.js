@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // Referencias
   const nombreUsuario = document.getElementById("nombreUsuario");
   const btnSalir = document.getElementById("btnSalir");
   const selectFicha = document.getElementById("selectFicha");
@@ -27,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.location.href = "index.html";
   });
 
-  // Cargar fichas
+  
   const fichas = await obtenerFichas();
   selectFicha.innerHTML = '<option value="">Seleccione una ficha</option>';
 
@@ -38,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     selectFicha.appendChild(opt);
   });
 
-  // Cuando cambia la ficha
+
   selectFicha.addEventListener("change", async () => {
     tablaJuicios.innerHTML = "";
     selectAprendiz.innerHTML = '<option value="">Seleccione un aprendiz</option>';
@@ -55,7 +54,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
-  // Cuando cambia el aprendiz
   selectAprendiz.addEventListener("change", () => {
     const valor = selectAprendiz.value;
     if (!valor) return;
