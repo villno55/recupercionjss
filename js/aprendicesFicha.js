@@ -20,7 +20,7 @@ export async function obtenerAprendices(urlFicha) {
         resultado: item["Resultado de Aprendizaje"] || "N/A",
         estado: item["Juicio de Evaluación"] || "N/A",
         fecha: item["Fecha y Hora del Juicio Evaluativo"] || item["Fecha"] || item["FECHA"] || item["fecha"] || null,
-        instructor: item["Funcionario que registro el juicio evaluativo"] || item["Instructor"] || "No registrado"
+        instructor: item["Funcionario que registro el juicio evaluativo"] || "No registrado"
       });
     });
 
