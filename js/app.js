@@ -19,17 +19,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   const porEvaluar = document.getElementById("porEvaluar");
   const tablaJuicios = document.getElementById("tablaJuicios");
 
-  let aprendices = []; 
+  let aprendices = [];
 
   nombreUsuario.textContent = usuario;
 
-  
   btnSalir.addEventListener("click", () => {
     localStorage.clear();
     window.location.href = "index.html";
   });
 
-  
   const fichas = await obtenerFichas();
   selectFicha.innerHTML = '<option value="">Seleccione una ficha</option>';
 
@@ -40,10 +38,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     selectFicha.appendChild(opt);
   });
 
-
   selectFicha.addEventListener("change", async () => {
     tablaJuicios.innerHTML = "";
     selectAprendiz.innerHTML = '<option value="">Seleccione un aprendiz</option>';
+    nombreCompleto.textContent = "";
+    estadoGeneral.textContent = "";
+    aprobados.textContent = "";
+    porEvaluar.textContent = "";
 
     const urlFicha = selectFicha.value;
     if (!urlFicha) return;
@@ -60,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     aprendices.forEach(a => {
       const opt = document.createElement("option");
       opt.value = a.documento;
-      opt.textContent = `${a.nombres} ${a.apellidos}`;
+      opt.textContent = `${a.nombres} ${a.apellidos} - ${a.documento}`;
       selectAprendiz.appendChild(opt);
     });
   });
@@ -72,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const aprendiz = aprendices.find(a => a.documento === doc);
     if (!aprendiz) return;
 
-    nombreCompleto.textContent = `${aprendiz.nombres} ${aprendiz.apellidos}`;
+    nombreCompleto.textContent = `${aprendiz.nombres} ${aprendiz.apellidos} (${aprendiz.documento})`;
 
     let aprobadosCount = 0;
     let porEvaluarCount = 0;
@@ -82,24 +83,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       const tr = document.createElement("tr");
 
       const tdResultado = document.createElement("td");
-      tdResultado.textContent = j.resultado;
+      tdResultado.textContent = j.resultado || "—";
       tr.appendChild(tdResultado);
 
       const tdEstado = document.createElement("td");
-      tdEstado.textContent = j.estado;
+      tdEstado.textContent = j.estado || "—";
       tr.appendChild(tdEstado);
 
       const tdFecha = document.createElement("td");
       if (j.estado && j.estado.toUpperCase() === "APROBADO" && j.fecha && j.fecha !== "Sin fecha") {
-        const fecha = new Date(j.fecha);
-        if (!isNaN(fecha)) {
-          tdFecha.textContent = fecha.toLocaleString("es-CO", {
-            dateStyle: "medium",
-            timeStyle: "short"
-          });
-        } else {
-          tdFecha.textContent = j.fecha; 
-        }
+        tdFecha.textContent = j.fecha;
       } else {
         tdFecha.textContent = "—";
       }
@@ -120,3 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     porEvaluar.textContent = porEvaluarCount;
   });
 });
+
+
+
+
